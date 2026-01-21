@@ -35,6 +35,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@main
+    # --- ADD THIS BLOCK HERE ---
+    - name: Check for Config File
+      run: |
+        if [ ! -f "$CONFIG_FILE" ]; then
+          echo "❌ Error: Config file '$CONFIG_FILE' not found!"
+          exit 1
+        fi
+    # ---------------------------
 
     - name: Initialization environment
       env:
