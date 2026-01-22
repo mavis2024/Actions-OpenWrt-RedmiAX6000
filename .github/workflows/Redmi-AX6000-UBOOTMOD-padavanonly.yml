@@ -15,6 +15,12 @@ name: Redmi-AX6000-ubootmod-padavanonly
 on:
   repository_dispatch:
   workflow_dispatch:
+    inputs:
+      ssh: 
+        description: 'Enable SSH connection'
+        required: false
+        default: false
+        type: boolean
 
 env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6/
@@ -26,6 +32,7 @@ env:
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: false
+  SSH_ACTIONS: false
   TZ: Asia/Shanghai
 
 jobs:
@@ -86,6 +93,10 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
+        
+    - name: SSH链接管理
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
 
     - name: Download package
       id: package
